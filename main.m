@@ -21,8 +21,8 @@ exheatflow = struct( ... % Heat integration for adding external heat flow
     'Ti',{30,300}, ... % input temperature
     'To',{35,200}, ... % output temperature
     'Q', {2000,-1000});% duty
-col_optim = 0; % Whether or not to perform column optimization
-work_dir = fullfile('D:','distillation',filesep); % Setting up the working directory
+colpressure = 0; % whether to optimize column pressure
+work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
 
 %% Create folder and copy file
 global AF mydir aspen gen_rule
@@ -105,12 +105,14 @@ DHVL=nan(column_num,1);TCMX=nan(column_num,1);PBUB=nan(column_num,1);PDEW=nan(co
 stream = aspen.Tree.FindNode('\Data\Streams\');
 for i = 1:column_num
     DHVL(i) = stream.FindNode([columnio{i,4},'\Output\STRM_UPP\DHVLMX\MIXED\TOTAL']).value;
-    % TCMX(i) = stream.FindNode([columnio{i,4},'\Output\STRM_UPP\TCMX\MIXED\TOTAL']).value;
-    % PBUB(i) = stream.FindNode([columnio{i,3},'\Output\STRM_UPP\PBUB\MIXED\TOTAL']).Element.Item(0).value;
-    % PDEW(i) = stream.FindNode([columnio{i,3},'\Output\STRM_UPP\PDEW\MIXED\TOTAL']).Element.Item(0).value;
+    if colpressure
+        TCMX(i) = stream.FindNode([columnio{i,4},'\Output\STRM_UPP\TCMX\MIXED\TOTAL']).value;
+        PBUB(i) = stream.FindNode([columnio{i,3},'\Output\STRM_UPP\PBUB\MIXED\TOTAL']).Element.Item(0).value;
+        PDEW(i) = stream.FindNode([columnio{i,3},'\Output\STRM_UPP\PDEW\MIXED\TOTAL']).Element.Item(0).value;
+    end
 end
 % Adjust the design specifications
-DSadjust(allcol,gen_rule,TCMX,PBUB,PDEW);
+DSadjust(allcol,gen_rule,colpressure,TCMX,PBUB,PDEW);
 % Optimize design parameters
 modify_param();
 allcol = readcolumn();
@@ -141,7 +143,7 @@ for i = 1:max_solution
         end
     end
     [solution{i}, objectiveValue(i)] = optimization(allcol,f,dupl,DHVL,forbidden_match,regression,sharp_sep,0);
-    if heat_integration == 1 && i == 1
+    if heat_integration && i == 1
         disp('[Heat integration calculation]')
         [solution_hi, ~] = optimization(allcol,f,dupl,DHVL,forbidden_match,regression,sharp_sep,1,exheatflow);
     end
@@ -155,7 +157,7 @@ for i = 1:max_solution
             writematrix(solution{i}.y(j),output_file,'Range',[char(73+2*i-1),num2str(j+1)]);
             c = c+1;
         end
-        if heat_integration == 1 && i == 1
+        if heat_integration && i == 1
             if ~isempty(solution_hi(1).y) && abs(solution_hi(i).y(j)-1) <= 1e-5
                 optim_col_hi = [optim_col_hi,j];
             end
@@ -177,7 +179,7 @@ for i = 1:max_solution
     disp(optim_col(i,:))
     fprintf('TAC%d = %.0f\n',i,objectiveValue(i))
 end
-if heat_integration == 1 && ~isempty(solution_hi(1).y)
+if heat_integration && ~isempty(solution_hi(1).y)
     fprintf('optim_col_hi =')
     disp(optim_col_hi)
 end
