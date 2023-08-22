@@ -40,7 +40,7 @@ col_optim = 0;          % Whether or not to perform column optimization
 work_dir = fullfile('D:','distillation',filesep); % Setting up the working directory
 ```
 
-[Learn more about GitHub Pages](https://pages.github.com/)
+[Links to this page](https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework)
 
 ## Publish your site
 
@@ -97,6 +97,6 @@ Want to add even more code and fun styles to your GitHub Pages website? [Follow 
 
 ![octocat](./images/create-octocat.png)
 
-## Everything you need to know about GitHub
+## License
 
-Getting started is the hardest part. If there’s anything you’d like to know as you get started with GitHub, try searching [GitHub Help](https://help.github.com). Our documentation has tutorials on everything from changing your repository settings to configuring GitHub from your command line.
+This software is open source under the GNU General Public License v3.0.
