@@ -39,6 +39,7 @@ exheatflow = struct( ...% Heat integration for adding external heat flow
 col_optim = 0;          % Whether or not to perform column optimization
 work_dir = fullfile('D:','distillation',filesep); % Setting up the working directory
 ```
+If you want to turn on automatic column pressure adjustment, you must set up an additional physical property analysis in Aspen.
 
 [Links to this page](https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework)
 
@@ -46,21 +47,13 @@ work_dir = fullfile('D:','distillation',filesep); % Setting up the working direc
 
 Use this file to define the components or groups to be separated. Please refer to sample case3.bkp for the format. Non-products are defined as 0, pure substance products are defined as 1, and mixture products are defined as 2.
 
-You can specify the default pressure and the default recovery rate with the structure ```gen_rule{1}```. You can also specify the recovery rate for a substance.
+You can specify the default pressure and the default recovery rate with the structure `gen_rule{1}`. You can also specify the recovery rate for a substance.
 
-If you want to use more than one set of utilities, specify the set of utilities in this file, e.g. ```utility_set=2;``` then define them in utilities.m. 
+If you want to use more than one set of utilities, specify the set of utilities in this file, e.g. `utility_set=2;` then define them in utilities.m. 
 
-## Publish your site
+### main2.m
 
-Your first GitHub Pages website is automatically published at: `https://your-username.github.io/`, where "your-username," is your personal username on GitHub. The HTML file—called `index.html`—is rendered as the home page and you'll be making changes to this file in the next step.
-
-Congratulations! You just launched your first GitHub Pages website. It's now live to share with the entire world.
-
-## Making your first edit
-
-When you make any change to any file in your project, you’re making a **commit**. If you fix a typo, update a filename, or edit your code, you can add it to GitHub as a commit. Your commits represent your project’s entire history—and they’re all saved in your project’s repository.
-
-With each commit, you have the opportunity to write a **commit message**, a short, meaningful comment describing the change you’re making to a file. So you always know exactly what changed, no matter when you return to a commit.
+We are working on the remaining guides...
 
 ## Practice: Customize your first GitHub website by writing HTML code
 
