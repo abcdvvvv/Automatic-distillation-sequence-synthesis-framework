@@ -16,11 +16,14 @@ MATLAB Optimization Toolbox™
 
 ## User Guide
 
-The user needs to download the entire code package to run the program.
+To establish the runtime environment for this framework, follow these steps:
 
-1. Prepare a simulation file. The user needs to define the components needed first. Then draw a feed stream in the flowchart screen and enter the name of that stream in main.m (feedstream).
-2. Create a new item in the property set of Aspen Plus, named PS-1, to analyze the mixture's vaporization heat (DHVLMX) in kJ/kmol.
-3. Place this file in /simulation file/baseFile and enter the name of the file into main.m (basefile).
+1. Begin by downloading and unzipping the complete code package.
+2. Create a new Aspen Plus simulation file. Define components according to preferences or use provided case files. Add a feed stream in the flowchart and input its name into the variable 'feedstream' in 'main.m' for integration.
+3. In Aspen Plus, establish a 'PS-1' property set item to analyze mixture vaporization heat (DHVLMX) in kJ/kmol.
+4. Put the mentioned file in '/simulation file/baseFile' directory. Input its name into the variable 'basefile' in 'main.m'.
+5. Modify 'name2struct.m' by adding a case for the new file's name. Create a 'material' structure as outlined in the 'name2struct.m' section for defining the product subset.
+6. Execute the 'main.m' script. :tada:
 
 ### main.m
 
@@ -83,7 +86,7 @@ All the results of the calculations are stored in a spreadsheet called **output.
 
 If you successfully run through main.m, you will get all the data in the list, including solution1(2,3) and TAC. You will get the capital cost data for the Radfrac columns only if you run through main2.m.
 
-Please leave feedback on the github issue page if you have any questions. :tada:
+Please leave feedback on the github issue page if you have any questions.
 
 ## License
 
