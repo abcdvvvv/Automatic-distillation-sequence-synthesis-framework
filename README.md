@@ -42,6 +42,14 @@ work_dir = fullfile('D:','distillation',filesep); % Setting up the working direc
 
 [Links to this page](https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework)
 
+### name2struct.m
+
+Use this file to define the components or groups to be separated. Please refer to sample case3.bkp for the format. Non-products are defined as 0, pure substance products are defined as 1, and mixture products are defined as 2.
+
+You can specify the default pressure and the default recovery rate with the structure ```gen_rule{1}```. You can also specify the recovery rate for a substance.
+
+If you want to use more than one set of utilities, specify the set of utilities in this file, e.g. ```utility_set=2;``` then define them in utilities.m. 
+
 ## Publish your site
 
 Your first GitHub Pages website is automatically published at: `https://your-username.github.io/`, where "your-username," is your personal username on GitHub. The HTML file—called `index.html`—is rendered as the home page and you'll be making changes to this file in the next step.
