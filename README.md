@@ -14,7 +14,7 @@ MATLAB Optimization Toolbox™
 
 Prepare a simulation file.
 
-### main
+### main.m
 
 asd
 
