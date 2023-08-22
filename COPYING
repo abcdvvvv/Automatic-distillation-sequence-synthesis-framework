@@ -632,6 +632,11 @@ state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
     Automatic distillation sequence synthesis framework
+    We propose a framework for the automatic synthesis and optimization of 
+distillation sequences by integrating the Aspen Plus with the MATLAB 
+programming platform. The framework combines the concept of binary trees 
+in data structures and uses a preorder traversal algorithm to generate a 
+network superstructure in the simulator.
     Copyright (C) 2023  abcdvvvv
 
     This program is free software: you can redistribute it and/or modify
@@ -652,7 +657,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    <program>  Copyright (C) 2023  abcdvvvv
+    Automatic distillation sequence synthesis framework  Copyright (C) 2023  abcdvvvv
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
