@@ -26,7 +26,7 @@ The user needs to download the entire code package to run the program.
 
 This function creates a distillation sequence superstructure using the preorder traversal algorithm and the DSTWU model. The program will try to execute the simulation. If the simulation is error-free, it will adjust the parameters and then use the simulation results to formulate the MILP problem. Note that all separations are sharp separations.
 
-There are **six** user-specified parameters in this function
+There are six user-specified parameters in this function
 
 ```
 basefile = 'case3.bkp';
@@ -55,40 +55,13 @@ If you want to use more than one set of utilities, specify the set of utilities 
 
 ### main2.m
 
+The script redeploys the optimal distillation sequence using the Radfrac model and optimizes it using an improved quadratic interpolation algorithm.
+
 We are working on the remaining guides...
 
-## Practice: Customize your first GitHub website by writing HTML code
+### Output
 
-Want to edit the site you just published? Let’s practice commits by introducing yourself in your `index.html` file. Don’t worry about getting it right the first time—you can always build on your introduction later.
-
-Let’s start with this template:
-
-```
-<p>Hello World! I’m [username]. This is my website!</p>
-```
-
-To add your introduction, copy our template and click the edit pencil icon at the top right hand corner of the `index.html` file.
-
-<img width="997" alt="edit-this-file" src="https://user-images.githubusercontent.com/18093541/63131820-0794d880-bf8d-11e9-8b3d-c096355e9389.png">
-
-
-Delete this placeholder line:
-
-```
-<p>Welcome to your first GitHub Pages website!</p>
-```
-
-Then, paste the template to line 15 and fill in the blanks.
-
-<img width="1032" alt="edit-githuboctocat-index" src="https://user-images.githubusercontent.com/18093541/63132339-c3a2d300-bf8e-11e9-8222-59c2702f6c42.png">
-
-
-When you’re done, scroll down to the `Commit changes` section near the bottom of the edit page. Add a short message explaining your change, like "Add my introduction", then click `Commit changes`.
-
-
-<img width="1030" alt="add-my-username" src="https://user-images.githubusercontent.com/18093541/63131801-efbd5480-bf8c-11e9-9806-89273f027d16.png">
-
-Once you click `Commit changes`, your changes will automatically be published on your GitHub Pages website. Refresh the page to see your new changes live in action.
+All the results of the calculations are stored in a spreadsheet called **output.xlsx**.
 
 :tada: You just made your first commit! :tada:
 
