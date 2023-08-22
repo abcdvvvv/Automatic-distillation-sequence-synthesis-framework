@@ -83,7 +83,7 @@ All the results of the calculations are stored in a spreadsheet called **output.
 
 If you successfully run through main.m, you will get all the data in the list, including solution1(2,3) and TAC. You will get the capital cost data for the Radfrac columns only if you run through main2.m.
 
-:tada: You just made your first commit! :tada:
+Please leave feedback on the github issue page if you have any questions. :tada:
 
 ## License
 
