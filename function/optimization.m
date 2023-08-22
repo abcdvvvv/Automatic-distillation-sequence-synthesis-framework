@@ -134,7 +134,7 @@ function constraints = constraintFcn(F,C,f,sharp_sep)
             if sharp_sep==1
                 constraints(i) = sum_dupl(i) == streamf(dupl_1_num) / streamf(col) * F(col); %#ok<*AGROW>
             else
-                constraints(i) = sum_dupl(i) == f(dupl_1_num,1) / f(col,1) * F(col);
+                constraints(i) = sum_dupl(i) == f(dupl_1_num,2) / f(col,2) * F(col);
             end
         else
             mixernum=str2double(dupl{i,2}{1}(1:temp2-1));
