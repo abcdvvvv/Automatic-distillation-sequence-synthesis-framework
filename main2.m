@@ -18,8 +18,6 @@ for d = 1:1 % d=deploy
     copyfile([pwd,'\Simulation file\baseFile\',basefile],[mydir,filename3],'f');
     fprintf('Deploy optimized PFD %d\n',d)
     evoke(mydir,filename3);
-    block = aspen.Tree.FindNode('\Data\Blocks\');
-    stream = aspen.Tree.FindNode('\Data\Streams\');
     columnio = {};
     % redeploy
     col_deploy(material,optim_col(d,:),allcol,feedstream);
