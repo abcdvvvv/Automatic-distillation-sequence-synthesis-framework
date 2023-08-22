@@ -26,7 +26,7 @@ The user needs to download the entire code package to run the program.
 
 This function creates a distillation sequence superstructure using the preorder traversal algorithm and the DSTWU model. The program will try to execute the simulation. If the simulation is error-free, it will adjust the parameters and then use the simulation results to formulate the MILP problem. Note that all separations are sharp separations.
 
-There are five user-specified parameters in this function
+There are eight user-specified parameters in this function
 ```
 basefile = 'case3.bkp';
 feedstream = 'R1-1';    % The stream name entering the separation section
@@ -37,7 +37,8 @@ exheatflow = struct( ...% Heat integration for adding external heat flow
     'Ti',{30,300}, ...  % input temperature
     'To',{35,200}, ...  % output temperature
     'Q', {2000,-1000}); % duty
-work_dir = fullfile('D:','distillation',filesep); % Setting up the working directory
+colpressure = 0;        % whether to optimize column pressure
+work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
 ```
 **max_solution** controls how many optimal solutions the program solves for. Generally more than 4 may result in no solution.
 
@@ -47,7 +48,9 @@ Heat integration is calculated for **heat_integration** = 1 and not calculated f
 
 **exheatflow** is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
 
-**work_dir** allows you to set your own working directory. The program will create files in that directory. It is also acceptable to use an array of strings to represent the directory, for example `work_dir='d:/distillation/'`. Remember to add the slash at the end.
+**colpressure** is used to control whether the column pressure is optimized or not. Set to 1 for optimize and 0 for not. If optimizing, ensure property analysis has been added as indicated below.
+
+**work_dir** allows you to set your own working directory. The program will create files in that directory. The default directory is the "simulation file" folder in the current folder. It is also acceptable to use an array of strings to represent the directory, for example `work_dir='d:/distillation/'`. Remember to add the slash at the end.
 
 If you want to turn on automatic column pressure adjustment, you must set up an additional physical property analysis in Aspen, they are
 
