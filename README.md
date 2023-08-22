@@ -52,7 +52,7 @@ Heat integration is calculated for **heat_integration** = 1 and not calculated f
 If you want to turn on automatic column pressure adjustment, you must set up an additional physical property analysis in Aspen, they are
 
 - Critical temperature of the mixture (TCMX) in °C. Set this item in PS-2.
-- Bubble point pressure and dew point pressure (PBUB and PDEW) in bar. Set up these two items in PS-3.
+- Bubble point pressure and dew point pressure (PBUB and PDEW) in bar. Set up these two items in PS-3. On the Qualifiers tab, uncheck System Temperature. On the right hand side enter the minimum temperature at which cooling water will be used, e.g. 40°C.
 
 This script pops up a graph after running, which shows the sensitivity analysis of the heating utility to the optimal solution.
 
