@@ -1,6 +1,5 @@
 function [material,gen_rule] = name2struct(basefile)
-%NAME2STRUCT 输入文件名称，输出与该模拟相对应的组分结构体
-%自定义文件需要:物性分析,单位集,切换公用工程
+% Input the name of the file and output the component structures corresponding to this simulation
 global utility_set
 switch basefile
     case 'case3.bkp'
