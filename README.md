@@ -5,7 +5,9 @@ This is a framework for automated distillation sequence synthesis using Aspen Pl
 ## Requirements
 
 Aspen Plus: V11 or higher
+
 MATLAB: 2022a or above
+
 MATLAB Optimization Toolbox™
 
 ## User Guide
