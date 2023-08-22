@@ -31,6 +31,6 @@ for i = 1:length(optim_col)
         cost_heating = cost_S*2 * reb_duty * 3600 * 8000 / 1e6;
     end
     % Operating Expense
-    OPEX(i) = abs(cost_cooling) + cost_heating + Cs;
+    OPEX(i) = abs(cost_cooling) + cost_heating;
 end
 end

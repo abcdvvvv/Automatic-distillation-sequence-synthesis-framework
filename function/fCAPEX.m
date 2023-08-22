@@ -30,6 +30,6 @@ for i = 1:length(optim_col)
     end
     cost_column = CAPEX4column(T_operation,P_operation,diameter,NT,H,column_material_type,plate_material_type);
     % Total
-    CAPEX(i) = (cost_column + cost_condenser + cost_reboiler + Cp) * Lang_F;
+    CAPEX(i) = cost_column * Lang_F;
 end
 end
