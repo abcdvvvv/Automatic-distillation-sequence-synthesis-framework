@@ -26,7 +26,7 @@ The user needs to download the entire code package to run the program.
 
 This function creates a distillation sequence superstructure using the preorder traversal algorithm and the DSTWU model. The program will try to execute the simulation. If the simulation is error-free, it will adjust the parameters and then use the simulation results to formulate the MILP problem. Note that all separations are sharp separations.
 
-There are six user-specified parameters in this function
+There are five user-specified parameters in this function
 
 ```
 basefile = 'case3.bkp';
@@ -38,7 +38,6 @@ exheatflow = struct( ...% Heat integration for adding external heat flow
     'Ti',{30,300}, ...  % input temperature
     'To',{35,200}, ...  % output temperature
     'Q', {2000,-1000}); % duty
-col_optim = 0;          % Whether or not to perform column optimization
 work_dir = fullfile('D:','distillation',filesep); % Setting up the working directory
 ```
 If you want to turn on automatic column pressure adjustment, you must set up an additional physical property analysis in Aspen.
