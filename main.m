@@ -1,10 +1,12 @@
-%=============================================================
-% Automatic distillation sequence synthesis framework        %
-% - based on the preorder traversal algorithm                %
-% 20230821 version                                           %
-% Note:                                                      %
-% 1.Regression cannot be used together with heat integration %
-%=============================================================
+%==========================================================================
+% Automatic distillation sequence synthesis framework                     %
+% - based on the preorder traversal algorithm                             %
+% 20230821 version                                                        %
+% Note:                                                                   %
+% 1.Regression cannot be used together with heat integration              %
+% This software is open source under the GNU General Public License v3.0. %
+% Copyright (C) 2023  abcdvvvv                                            %
+%==========================================================================
 clc
 clear all
 addpath('function\')
