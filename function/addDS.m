@@ -1,10 +1,10 @@
 function addDS(column_numop,allcol,optim_col)
 global aspen columnio
 block = aspen.Tree.FindNode('\Data\Blocks');
-disp('【添加Radfrac设计规定】');
+disp('【Add Radfrac Design Specifications】');
 
 for i=1:column_numop
-    t=optim_col(i); %t是要部署的塔的真实序号
+    t=optim_col(i);
     % design specification
     block.FindNode(['T',num2str(t),'\Subobjects\Design Specs']).Elements.Add('1');
     dsnode=block.FindNode(['T',num2str(t),'\Subobjects\Design Specs\1\Input']);
