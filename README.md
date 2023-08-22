@@ -2,6 +2,8 @@
 
 This is a framework for automated distillation sequence synthesis using Aspen Plus and MATLAB.
 
+This program is for development use only and does not have any graphical user interface. The user should have at least a basic knowledge of MATLAB programming and a background in chemical engineering.
+
 ## Requirements
 
 Aspen Plus: V11 or higher
@@ -14,15 +16,29 @@ MATLAB Optimization Toolbox™
 
 The user needs to download the entire code package to run the program.
 
-1. Prepare a simulation file. The user needs to define the components needed first. Then draw a feed stream in the flowchart screen and enter the name of that stream in main.m.
+1. Prepare a simulation file. The user needs to define the components needed first. Then draw a feed stream in the flowchart screen and enter the name of that stream in main.m (feedstream).
 2. Create a new item in the property set of Aspen Plus, named PS-1, to analyze the mixture's vaporization heat (DHVLMX) in kJ/kmol.
-3. Place this file in /simulation file/baseFile and enter the name of the file into main.m.
+3. Place this file in /simulation file/baseFile and enter the name of the file into main.m (basefile).
 
 ### main.m
 
-This function creates a distillation sequence superstructure using the DSTWU module and preorder traversal and formulizes MILP. note that all separations are sharp separations.
+This function creates a distillation sequence superstructure using the preorder traversal algorithm and the DSTWU model. The program will try to execute the simulation. If the simulation is error-free, it will adjust the parameters and then use the simulation results to formulate the MILP problem. Note that all separations are sharp separations.
 
-**GitHub Pages** is a free and easy way to create a website using the code that lives in your GitHub repositories. You can use GitHub Pages to build a portfolio of your work, create a personal website, or share a fun project that you coded with the world. GitHub Pages is automatically enabled in this repository, but when you create new repositories in the future, you'll need to enable GitHub Pages manually to launch your site.
+There are **six** user-specified parameters in this function
+
+```
+basefile = 'case3.bkp';
+feedstream = 'R1-1';    % The stream name entering the separation section
+max_solution = 1;       % How many optimal solutions to generate
+regression = 0;         % 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
+heat_integration = 0;   % Heat integration
+exheatflow = struct( ...% Heat integration for adding external heat flow
+    'Ti',{30,300}, ...  % input temperature
+    'To',{35,200}, ...  % output temperature
+    'Q', {2000,-1000}); % duty
+col_optim = 0;          % Whether or not to perform column optimization
+work_dir = fullfile('D:','distillation',filesep); % Setting up the working directory
+```
 
 [Learn more about GitHub Pages](https://pages.github.com/)
 
