@@ -8,33 +8,33 @@ total_cooling = 0;
 total_heating = 0;
 for i = 1:column_num
     % Cooling Cost
-    T_cond=optim_col.TTOP;
-    if T_cond>40
-        unit_cooling=cost_CW;
-    elseif T_cond>15 && T_cond<=40
-        unit_cooling=cost_CHW;
-    elseif T_cond>-5 && T_cond<=15
-        unit_cooling=cost_BW;
-    elseif T_cond<=-5
-        unit_cooling=cost_BW;
+    T_cond = optim_col.TTOP;
+    if T_cond > 40
+        price = cost_CW;
+    elseif T_cond > 15 && T_cond <= 40
+        price = cost_CHW;
+    elseif T_cond > -5 && T_cond <= 15
+        price = cost_BW;
+    elseif T_cond <= -5
+        price = cost_BW;
     end
-    total_cooling = total_cooling + unit_cooling * abs(K1(i)) * F(i) * 8000;
+    total_cooling = total_cooling+price*abs(K1(i))*F(i)*8000;
     % Heating Cost
-    T_reb=optim_col.TBOT;
-    if T_reb<115
-        unit_heating=cost_S;
-    elseif T_reb>=115 && T_reb<155
-        unit_heating=cost_LPS;
-    elseif T_reb>=155 && T_reb<179
-        unit_heating=cost_MPS;
-    elseif T_reb>=179 && T_reb<249
-        unit_heating=cost_HPS;
-    elseif T_reb>=249
-        unit_heating=cost_SHPS;
+    T_reb = optim_col.TBOT;
+    if T_reb < 115
+        price = cost_S;
+    elseif T_reb >= 115 && T_reb < 155
+        price = cost_LPS;
+    elseif T_reb >= 155 && T_reb < 179
+        price = cost_MPS;
+    elseif T_reb >= 179 && T_reb < 249
+        price = cost_HPS;
+    elseif T_reb >= 249
+        price = cost_SHPS;
     end
-    total_heating = total_heating + unit_heating * K2(i) * F(i) * 8000;
+    total_heating = total_heating+price*K2(i)*F(i)*8000;
 end
 % Operating Expense
-OPEX = total_cooling + total_heating;
+OPEX = total_cooling+total_heating;
 
 end
