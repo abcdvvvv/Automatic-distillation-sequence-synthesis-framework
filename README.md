@@ -16,7 +16,7 @@ MATLAB Optimization Toolbox™
 
 ## User Guide
 
-To establish the runtime environment for this framework, follow these steps:
+The following steps will guide you through the quick setup of the framework's runtime environment.
 
 1. Begin by downloading and unzipping the complete code package.
 2. Create a new Aspen Plus simulation file. Define components according to preferences or use provided case files. Add a feed stream in the flowchart and input its name into the variable 'feedstream' in 'main.m' for integration.
@@ -24,6 +24,8 @@ To establish the runtime environment for this framework, follow these steps:
 4. Put the mentioned file in '/simulation file/baseFile' directory. Input its name into the variable 'basefile' in 'main.m'.
 5. Modify 'name2struct.m' by adding a case for the new file's name. Create a 'material' structure as outlined in the 'name2struct.m' section for defining the product subset.
 6. Execute the 'main.m' script. :tada:
+
+For additional configuration customization, refer to the detailed descriptions of each individual script.
 
 ### main.m
 
