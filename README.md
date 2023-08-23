@@ -68,6 +68,13 @@ This script pops up a graph after running, which shows the sensitivity analysis 
 
 Use this file to define the components or groups to be separated. Please refer to sample case3.bkp for the format. Non-products are defined as 0, pure substance products are defined as 1, and mixture products are defined as 2.
 
+Here is a simple example. It defines four components: n-propane, n-butane, isopentane, and n-pentane. N-propane is defined as a non-product, n-butane is defined as a product, and isopentane and n-pentane are defined as a "group".
+```
+case 'case1.bkp'
+    material = struct( ...
+        'name',{'NC3','NC4','IC5','NC5'}, ...
+        'product',{0 1 2 2});
+```
 You can specify the default pressure and the default recovery rate with the structure `gen_rule{1}`. You can also specify the recovery rate for a substance.
 
 If you want to use more than one set of utilities, specify the set of utilities in this file, e.g. `utility_set=2;` then define them in utilities.m. 
