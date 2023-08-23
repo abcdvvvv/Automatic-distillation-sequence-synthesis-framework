@@ -47,15 +47,15 @@ work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working dir
 ```
 *max_solution* controls how many optimal solutions the program solves for. Generally more than 4 may result in no solution.
 
-**regression** = 1 was used to calculate the relationship between feed flow F and CAPEX using linear regression. No regression when it equals 0.
+*regression* = 1 was used to calculate the relationship between feed flow F and CAPEX using linear regression. No regression when it equals 0.
 
-Heat integration is calculated for **heat_integration** = 1 and not calculated for 0. The code for heat integration is not yet complete and in some cases it is not possible to derive feasible solutions. To be fixed.
+*heat_integration* indicates whether the heat integration calculation is performed or not. 1 yes 0 no. The code for heat integration is not yet complete and in some cases it is not possible to derive feasible solutions. To be fixed.
 
-**exheatflow** is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
+*exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
 
-**colpressure** is used to control whether the column pressure is optimized or not. Set to 1 for optimize and 0 for not. If optimizing, ensure property analysis has been added as indicated below.
+*colpressure* is used to control whether the column pressure is optimized or not. Set to 1 for optimize and 0 for not. If optimizing, ensure property analysis has been added as indicated below.
 
-**work_dir** allows you to set your own working directory. The program will create files in that directory. The default directory is the "simulation file" folder in the current folder. It is also acceptable to use an array of strings to represent the directory, for example `work_dir='d:/distillation/'`. Remember to add the slash at the end.
+*work_dir* allows you to set your own working directory. The program will create files in that directory. The default directory is the "simulation file" folder in the current folder. It is also acceptable to use an array of strings to represent the directory, for example `work_dir='d:/distillation/'`. Remember to add the slash at the end.
 
 If you want to turn on automatic column pressure adjustment, you must set up an additional physical property analysis in Aspen, they are
 
