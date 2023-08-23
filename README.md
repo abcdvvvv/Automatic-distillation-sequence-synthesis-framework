@@ -62,7 +62,7 @@ If you want to turn on automatic column pressure adjustment, you must set up an 
 
 This script pops up a graph after running, which shows the sensitivity analysis of the heating utility to the optimal solution.
 
-[Links to this page](https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework)
+Project Address: [Links to this page](https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework)
 
 ### name2struct.m
 
