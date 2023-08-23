@@ -45,7 +45,7 @@ exheatflow = struct( ...% Heat integration for adding external heat flow
 colpressure = 0;        % whether to optimize column pressure
 work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
 ```
-**max_solution** controls how many optimal solutions the program solves for. Generally more than 4 may result in no solution.
+*max_solution* controls how many optimal solutions the program solves for. Generally more than 4 may result in no solution.
 
 **regression** = 1 was used to calculate the relationship between feed flow F and CAPEX using linear regression. No regression when it equals 0.
 
