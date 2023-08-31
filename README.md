@@ -2,7 +2,7 @@
 
 This is a framework for automated distillation sequence synthesis using Aspen Plus and MATLAB.
 
-<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/github8-31.png" width="700">
+<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/github8-31.png" width="800">
 
 Notably, this program does not offer a graphical user interface. Instead, for the manipulation of certain operational parameters, direct interaction within the programming interface is required. Thus, users are expected to possess a foundational understanding of MATLAB programming and a background in chemical engineering.
 
