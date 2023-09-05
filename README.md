@@ -8,7 +8,7 @@ Notably, this program does not offer a graphical user interface. Instead, for th
 
 ## Requirements
 
-Aspen Plus: V11 or higher
+Aspen Plus: V11 or above
 
 MATLAB: 2022a or above
 
