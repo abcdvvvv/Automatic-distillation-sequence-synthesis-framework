@@ -1,7 +1,7 @@
 %==========================================================================
 % Automatic distillation sequence synthesis framework                     %
 % - based on the preorder traversal algorithm                             %
-% 20230821 version                                                        %
+% Developed with MATLAB R2022a, version 20230821                          %
 % Note:                                                                   %
 % 1.Regression cannot be used together with heat integration              %
 % This software is open source under the GNU General Public License v3.0. %
