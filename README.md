@@ -1,10 +1,10 @@
 # Automatic distillation sequence synthesis framework
 
-This is a framework for automated distillation sequence synthesis using Aspen Plus and MATLAB.
+This is a MATLAB implementation of the distillation sequence synthesis methodology presented in the paper "An automatic distillation sequence synthesis framework based on a preorder traversal algorithm." Refer to the aforementioned paper for theoretical aspects. This section will outline the guidelines for utilizing the framework.
 
 <img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/github8-31.png" width="800">
 
-Notably, this program does not offer a graphical user interface. Instead, for the manipulation of certain operational parameters, direct interaction within the programming interface is required. Thus, users are expected to possess a foundational understanding of MATLAB programming and a background in chemical engineering.
+This program does not have a graphical user interface. Instead, the user will need to interact directly with the programming interface in order to manipulate certain operating parameters. Therefore, users are expected to have a foundational understanding of MATLAB programming and a background in chemical engineering.
 
 ## Requirements
 
@@ -109,3 +109,6 @@ Please leave feedback on the github issue page if you have any questions.
 ## License
 
 This software is open source under the GNU General Public License v3.0.
+
+If this tool helps you, please consider citing our paper: Wang A, Guzman-Urbina A, Ohno H, Fukushima Y. An automatic distillation sequence synthesis framework based on a preorder traversal algorithm. Computers & Chemical Engineering. 2024;181:108549. doi:10.1016/j.compchemeng.2023.108549
+Thank you!
