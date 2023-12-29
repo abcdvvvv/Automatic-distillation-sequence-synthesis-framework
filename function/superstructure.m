@@ -27,6 +27,7 @@ else
         split_left = k;
         split_right = k + 1;
         if material(split_left).sep == material(split_right).sep
+            k=k+1;
             continue;
         end
         period_count(step) = period_count(step) + 1;
