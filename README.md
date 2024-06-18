@@ -38,20 +38,13 @@ feedstream = 'R1-1';    % The stream name entering the separation section
 max_solution = 1;       % How many optimal solutions to generate
 regression = 0;         % 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
 heat_integration = 0;   % Heat integration
-exheatflow = struct( ...% Heat integration for adding external heat flow
-    'Ti',{30,300}, ...  % input temperature
-    'To',{35,200}, ...  % output temperature
-    'Q', {2000,-1000}); % duty
-colpressure = 0;        % whether to optimize column pressure
+colpressure = 0; % whether to optimize column pressure
 work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
+AF = 1/3;               % Annualization factor
 ```
-*max_solution* controls how many optimal solutions the program solves for. Generally more than 4 may result in no solution.
-
 *regression* = 1 was used to calculate the relationship between feed flow F and CAPEX using linear regression. No regression when it equals 0.
 
 *heat_integration* indicates whether the heat integration calculation is performed (1) or not (0). The code for heat integration is not yet complete and in some cases it is not possible to derive feasible solutions. To be fixed.
-
-*exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
 
 *colpressure* is used to control whether the column pressure is optimized (1) or not (0). If optimizing, ensure property analysis has been added as indicated below.
 
@@ -89,6 +82,17 @@ The following example shows how to set the default pressure to 1 bar with a reco
         'recovh',   {0.001      0.02});
 ```
 If you want to use more than one set of utilities, specify the set of utilities in this file, e.g. `utility_set=2;` then define them in utilities.m. 
+
+```
+    exheatflow = struct( ... % Heat integration for adding external heat flow
+        'Ti',{30,300}, ... % input temperature
+        'To',{35,200}, ... % output temperature
+        'Q', {2000,-1000});% duty
+    max_solution = 3; % How many optimal solutions to generate
+```
+*exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
+
+*max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharply separated sequences with this formula! $\frac{(2(n_{c}-1)!}{n_{c}!(n_{c}-1)!}$
 
 ### main2.m
 
