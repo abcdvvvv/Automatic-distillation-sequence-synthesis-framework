@@ -50,6 +50,8 @@ AF = 1/3;               % Annualization factor
 
 *work_dir* allows you to set your own working directory. The program will create files in that directory. The default directory is the "simulation file" folder in the current folder. It is also acceptable to use an array of strings to represent the directory, for example `work_dir='d:/distillation/'`. Remember to add the slash at the end.
 
+*AF* is an annualized factor of the capital cost, which spreads the fixed capital investment of a chemical plant over each year, taking into account the time value of money.
+
 If you want to turn on automatic column pressure adjustment, you must set up an additional physical property analysis in Aspen, they are
 
 - Critical temperature of the mixture (TCMX) in °C. Set this item in PS-2.
@@ -92,7 +94,7 @@ If you want to use more than one set of utilities, specify the set of utilities 
 ```
 *exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
 
-*max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharply separated sequences with this formula! $\frac{(2(n_{c}-1)!}{n_{c}!(n_{c}-1)!}$
+*max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharp separation sequences with this formula! $[2(n_{c}-1)]!/n_{c}!(n_{c}-1)!$
 
 ### main2.m
 
