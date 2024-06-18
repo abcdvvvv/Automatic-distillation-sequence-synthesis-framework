@@ -1,11 +1,17 @@
 function allcol = readcolumn(allcol,optim_col)
 global aspen column_num
 block = aspen.Tree.FindNode('\Data\Blocks');
-if ~exist("allcol","var")
-    allcol = struct('num',{},'PTOP',{},'PBOT',{},'TTOP',{},'TBOT',{},'lightkey',{},'recovl',{},'heavykey',{},'recovh',{}, ...
-    'RR',{},'D_F',{},'minstage',{},'stage',{},'fstage',{},'cond_duty',{},'reb_duty',{},'D',{},'type',{},'HETP',{},'cond_type',{});
-    for i = 1:column_num    
+
+if nargin == 0 || nargin == 1
+    if nargin == 0
+        allcol = struct('num',{},'PTOP',{},'PBOT',{},'TTOP',{},'TBOT',{},'lightkey',{},'recovl',{}, ...
+            'heavykey',{},'recovh',{},'minRR',{},'RR',{},'D_F',{},'minstage',{},'stage',{}, ...
+            'fstage',{},'cond_duty',{},'reb_duty',{},'D',{},'type',{},'HETP',{},'cond_type',{}, ...
+            'Cut',{},'Cap',{});
+    end
+    for i = 1:column_num
         allcol(i).num = i;
+
         allcol(i).PTOP = block.FindNode(['T',num2str(i),'\Input\PTOP']).value;
         allcol(i).TTOP = block.FindNode(['T',num2str(i),'\Output\DISTIL_TEMP']).value;
         allcol(i).cond_duty = block.FindNode(['T', num2str(i), '\Output\COND_DUTY']).value;
@@ -29,7 +35,7 @@ if ~exist("allcol","var")
             allcol(i).cond_type=1;
         end
     end
-elseif isa(allcol,"struct")
+else
     for i=1:length(optim_col)
         t=optim_col(i);
         allcol(t).PTOP=block.FindNode(['T',num2str(t),'\Output\PRES1']).value;
@@ -42,7 +48,7 @@ elseif isa(allcol,"struct")
         try allcol(t).D=block.FindNode(['T',num2str(t),'\Subobjects\Column Internals\INT-1\Output\CA_DIAM6\INT-1\CS-1']).value; catch end
         allcol(t).stage=block.FindNode(['T',num2str(t),'\Input\NSTAGE']).value;
         allcol(t).RR=block.FindNode(['T',num2str(t),'\Output\MOLE_RR']).value;
-        allcol(t).D_F=block.FindNode(['T',num2str(t),'\Output\MOLE_DFR']).value;
+        try allcol(t).D_F=block.FindNode(['T',num2str(t),'\Output\MOLE_DFR']).value; catch end
     end
 end
 end
