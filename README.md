@@ -38,7 +38,7 @@ feedstream = 'R1-1';    % The stream name entering the separation section
 max_solution = 1;       % How many optimal solutions to generate
 regression = 0;         % 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
 heat_integration = 0;   % Heat integration
-colpressure = 0; % whether to optimize column pressure
+colpressure = 0;        % whether to optimize column pressure
 work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
 AF = 1/3;               % Annualization factor
 ```
@@ -94,7 +94,7 @@ If you want to use more than one set of utilities, specify the set of utilities 
 ```
 *exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
 
-*max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharp separation sequences with this formula! $[2(n_{c}-1)]!/n_{c}!(n_{c}-1)!$
+*max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharp separation sequences with this formula! $[2(n_{\mathrm{c}}-1)]!/n_{\mathrm{c}}!(n_{\mathrm{c}}-1)!$
 
 ### main2.m
 
