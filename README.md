@@ -106,7 +106,7 @@ The user can choose which distillation sequences to redeploy by changing the loo
 
 ### Output
 
-All the results of the calculations are stored in a spreadsheet called **output.xlsx**.
+All the results of the calculations are stored in a spreadsheet called **output.xlsx**. In version 1.1, the format of the spreadsheet was optimized to make it more suitable for use in publications.
 
 If you successfully run through main.m, you will get all the data in the list, including solution1(2,3) and TAC. You will get the capital cost data for the Radfrac columns only if you run through main2.m.
 
