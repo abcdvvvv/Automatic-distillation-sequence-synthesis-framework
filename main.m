@@ -1,40 +1,39 @@
-%==========================================================================
-% Automatic distillation sequence synthesis framework                     %
-% - based on the preorder traversal algorithm                             %
-% Developed with MATLAB R2022a, version 20230821                          %
-% Note:                                                                   %
-% 1.Regression cannot be used together with heat integration              %
-% This software is open source under the GNU General Public License v3.0. %
-% Copyright (C) 2023  abcdvvvv                                            %
-%==========================================================================
+%{
+=========================================================================
+Automatic distillation sequence synthesis framework
+- based on the preorder traversal algorithm 
+Version 1.1 Updated 2024/6/18
+Note:
+1.Regression cannot be used together with heat integration
+This software is open source under the GNU General Public License v3.0.
+Copyright (C) 2024  abcdvvvv
+=========================================================================
+%}
 clc
 clear all
 addpath('function\')
 
 %% User options
+global AF gen_rule
+GUIindicator = 0;
 basefile = 'case3.bkp';
+path = [pwd,'\Simulation file\baseFile\'];
 feedstream = 'R1-1'; % The stream name entering the separation section
-max_solution = 3; % How many optimal solutions to generate
 regression = 0; % 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
 heat_integration = 0; % Heat integration
-exheatflow = struct( ... % Heat integration for adding external heat flow
-    'Ti',{30,300}, ... % input temperature
-    'To',{35,200}, ... % output temperature
-    'Q', {2000,-1000});% duty
-colpressure = 0; % whether to optimize column pressure
 work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
+AF = 1/3; % Annualization factor
+[material,gen_rule,exheatflow,max_solution] = name2struct(basefile,GUIindicator);
+colpressure = 0; % whether to optimize column pressure
 
 %% Create folder and copy file
-global AF mydir aspen gen_rule
-[material,gen_rule] = name2struct(basefile);
-AF = 1/3; % the Annualization factor
+global mydir aspen
 startTime = datetime("now","Format","yyyy-MM-dd_HH-mm-ss");
 mydir = [work_dir,char(startTime),'\'];
 if ~exist(mydir,'dir'),mkdir(mydir); end
 if ~exist(work_dir,"dir"),mkdir(work_dir); end
-disp(mydir)
 filename = 'base_superstructure.bkp';
-copyfile([pwd,'\Simulation file\baseFile\',basefile],[mydir,filename],'f');
+copyfile([path,basefile],[mydir,filename],'f');
 output_file = [mydir,'output.xlsx'];
 evoke(mydir,filename);
 run();
@@ -44,6 +43,8 @@ material_num = length(material);
 for i = 1:material_num
     material(i).num = i;
 end
+
+
 stream = aspen.Tree.FindNode('\Data\Streams\');
 i = 1;
 while i <= material_num
@@ -84,7 +85,7 @@ fprintf('%d',[material.sep])
 fprintf('\n%d-component distillation sequence synthesis\n',material(end).sep)
 
 %% Generate the superstructure
-fprintf('【Generate the superstructure】\n')
+fprintf('[Generate the superstructure]\n')
 global dupl columnio column_num
 dupl = {'S', {}, 1, length(material)};
 columnio = {};
@@ -92,7 +93,6 @@ superstructure(material,feedstream,gen_rule);
 try
     a = run();
 catch
-    aspen.Quit
     evoke(mydir,filename);
     a = run();
 end
@@ -100,27 +100,22 @@ end
 if a, fixerror(); end
 pause(1)
 allcol = readcolumn();
-% Read physical properties from streams
-DHVL=nan(column_num,1);TCMX=nan(column_num,1);PBUB=nan(column_num,1);PDEW=nan(column_num,1);
-stream = aspen.Tree.FindNode('\Data\Streams\');
-for i = 1:column_num
-    DHVL(i) = stream.FindNode([columnio{i,4},'\Output\STRM_UPP\DHVLMX\MIXED\TOTAL']).value;
-    if colpressure
-        TCMX(i) = stream.FindNode([columnio{i,4},'\Output\STRM_UPP\TCMX\MIXED\TOTAL']).value;
-        PBUB(i) = stream.FindNode([columnio{i,3},'\Output\STRM_UPP\PBUB\MIXED\TOTAL']).Element.Item(0).value;
-        PDEW(i) = stream.FindNode([columnio{i,3},'\Output\STRM_UPP\PDEW\MIXED\TOTAL']).Element.Item(0).value;
-    end
-end
-% Adjust the design specifications
-DSadjust(allcol,gen_rule,colpressure,TCMX,PBUB,PDEW);
+
+%% Adjust the design specifications
+DSadjust(allcol,gen_rule,colpressure);
 % Optimize design parameters
 modify_param();
-allcol = readcolumn();
+allcol = readcolumn(allcol);
+stream = aspen.Tree.FindNode('\Data\Streams\');
+for i = 1:column_num
+    % heat of vaporization
+    DHVL(i) = stream.FindNode([columnio{i,4},'\Output\STRM_UPP\DHVLMX\MIXED\TOTAL']).value;
+end
 % Output data
-odata(allcol,material,DHVL,output_file);
+allcol = odata(allcol,material,output_file,DHVL);
 
 %% MILP modeling and optimization
-fprintf('【Optimization】\n')
+fprintf('[Optimization]\n')
 sharp_sep = regression; % regression when sharp_sep
 if sharp_sep == 0 % read flow rate from aspen
     f = zeros(4);
@@ -132,58 +127,90 @@ if sharp_sep == 0 % read flow rate from aspen
     end
 end
 forbidden_match = {};
-objectiveValue = nan(max_solution,1);
+solution = cell(max_solution,1);
+objValue = nan(max_solution,1);
+optim_col = cell(max_solution,1);
+writematrix(["Seq." "Selected column" "Cut (M$/yr)" "Cap (M$/yr)" "TAC (M$/yr)" "HICut (M$/yr)" ...
+    "HICap (M$/yr)" "HITAC (M$/yr)"],output_file,'Sheet','Results','Range','A2')
+tic
 for i = 1:max_solution
     if i > 1
-        position0 = find(optim_col(i-1,:) == 0,1);
-        if isempty(position0)
-            forbidden_match{i-1} = optim_col(i-1,:); %#ok<*SAGROW>
-        else
-            forbidden_match{i-1} = optim_col(i-1,1:position0-1);
-        end
+        forbidden_match{i-1} = optim_col{i-1};
     end
-    [solution{i}, objectiveValue(i)] = optimization(allcol,f,dupl,DHVL,forbidden_match,regression,sharp_sep,0);
-    if heat_integration && i == 1
-        disp('[Heat integration calculation]')
-        [solution_hi, ~] = optimization(allcol,f,dupl,DHVL,forbidden_match,regression,sharp_sep,1,exheatflow);
+    force_match=[];
+    [solution{i}, objValue(i)] = ...
+        optimization(allcol,f,dupl,DHVL,forbidden_match,regression,sharp_sep,0,[],force_match, ...
+        material(end).sep);
+    if i==1
+        CutAll=readmatrix(output_file,'Range',[char(74),'2:',char(74),num2str(column_num+1)]);
+        CapAll=readmatrix(output_file,'Range',[char(73),'2:',char(73),num2str(column_num+1)]);
     end
-    writematrix(['Solution',num2str(i)],output_file,'Range',[char(73+2*i-1),'1']);
-    writematrix('Radfrac',output_file,'Range',[char(73+2*i),'1']);
-    % solution --> optim_col
-    c = 1; optim_col_hi = [];
-    for j = 1:column_num
-        if abs(solution{i}.y(j)-1) <= 1e-5
-            optim_col(i,c) = j;
-            writematrix(solution{i}.y(j),output_file,'Range',[char(73+2*i-1),num2str(j+1)]);
-            c = c+1;
-        end
-        if heat_integration && i == 1
-            if ~isempty(solution_hi(1).y) && abs(solution_hi(i).y(j)-1) <= 1e-5
-                optim_col_hi = [optim_col_hi,j];
-            end
-        end
+    if ~isempty(solution{i})
+        optim_col{i} = find(abs(solution{i}.y-1) <= 1e-5)';
+        Cut(i,1) = sum(CutAll(optim_col{i}));
+        Cap(i,1) = sum(CapAll(optim_col{i}));
     end
-    writematrix('TAC(USD/a)',output_file,'Range',[char(73+2*i-1),num2str(column_num+2)]);
-    writematrix(objectiveValue(i),output_file,'Range',[char(73+2*i-1),num2str(column_num+3)]);
     % Sensitivity Analysis with built-in plot
-    if max_solution > 1 && ~regression
-        SensitivityAna(allcol,optim_col(i,:),output_file);
-        if i==max_solution
-            legend('1st','2nd','3rd')
+    % if max_solution > 1 && ~regression
+    %     SensitivityAna(allcol,optim_col(i,:),output_file);
+    %     if i==max_solution
+    %         legend('1st','2nd','3rd')
+    %     end
+    % end
+end
+nonHItime=toc/max_solution;
+fprintf('Average time for non-heat integration calculations=%.4f s\n',nonHItime)
+writematrix([Cut,Cap,objValue],output_file,'Sheet','Results','Range','C3')
+for i=1:length(optim_col)
+    writematrix(num2str(optim_col{i}),output_file,'Sheet','Results','Range',['B',num2str(2+i)])
+end
+
+%% Heat integration
+forbidden_match = {};
+solution_hi = cell(max_solution,1);
+objValue_hi = nan(max_solution,1);
+optim_col_hi = cell(max_solution,1);
+tic
+for i = 1:max_solution*heat_integration
+    if i > 1
+        forbidden_match{i-1} = optim_col_hi{i-1};
+    end
+    disp('[Heat integration calculation]')
+    force_match=[];
+    [solution_hi{i}, objValue_hi(i)] = optimization(allcol,f,dupl,DHVL,forbidden_match, ...
+        regression,sharp_sep,1,exheatflow,force_match,material(end).sep);
+    if ~isempty(solution_hi{i})
+        optim_col_hi{i} = find(abs(solution_hi{i}.y-1) <= 1e-5)';
+    end
+    HICap(i,1)=sum(solution_hi{i}.mu);
+    HiCop(i,1)=objValue_hi(i)-HICap(i,1)*AF;
+end
+if heat_integration
+    HItime=toc/max_solution;
+    fprintf('Average time for heat integration calculations=%.4f s\n',HItime)
+    for i=1:length(optim_col)
+        for j=1:length(optim_col)
+            if isequal(optim_col_hi{j},optim_col{i})
+                writematrix([HiCop(j),sum(solution_hi{j}.mu),objValue_hi(j)],output_file, ...
+                    'Sheet','Results','Range',['F',num2str(2+i)])
+            end
         end
     end
 end
 % show optimal solutions
 for i = 1:max_solution
     fprintf('optim_col%d =',i)
-    disp(optim_col(i,:))
-    fprintf('TAC%d = %.0f\n',i,objectiveValue(i))
+    fprintf('\t%d',optim_col{i})
+    fprintf('\nTAC%d = %.0f\n\n',i,objValue(i))
 end
-if heat_integration && ~isempty(solution_hi(1).y)
-    fprintf('optim_col_hi =')
-    disp(optim_col_hi)
+if heat_integration && ~isempty(solution_hi{1}.y)
+    for i = 1:max_solution
+        fprintf('optim_col_hi%d =',i)
+        fprintf('\t%d',optim_col_hi{i})
+        fprintf('\nTAC%d = %.0f\n\n',i,objValue_hi(i))
+    end
 end
 aspen.Save
 disp('Saving current results...')
-save([mydir,'case1.mat']);
+save([mydir,'case1.mat'],'-regexp','^(?!(aspen)$)\w+$')
 disp('All done.')
