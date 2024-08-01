@@ -27,8 +27,8 @@ deploy(0);
                     % generate a column
                     column_name = ['T', num2str(col2)]; % col2, last_col is the true number of the column to be deployed
                     pump_name = ['P', num2str(col2)];
-                    % col3=find(optim_col == col2);%col3是要部署的塔在optim_col(旧)中的索引,optim(col3).num=col2
-                    % col3last=find(optim_col == last_col);%col3last是上一座塔在optim_col中的索引
+                    % col3=find(optim_col == col2);% col3 is the index of the tower to be deployed in optim_col(old),optim(col3).num=col2
+                    % col3last=find(optim_col == last_col);% col3last is the index of the last tower in optim_col
                     dupl_D = [column_name,'D'];
                     dupl_B = [column_name,'B'];
                     block.Elements.Add([column_name,'!RADFRAC']);
@@ -91,8 +91,8 @@ deploy(0);
                     block.FindNode([column_name,'\Input\BASIS_RR']).value = allcol(col2).RR;
                     block.FindNode([column_name,'\Input\D:F']).value = allcol(col2).D_F;
                     % pressure
-                    block.FindNode([column_name,'\Input\PRES1']).value = allcol(col2).PTOP; %操作压力
-                    block.FindNode([column_name,'\Input\DP_STAGE']).value = 0.006; %单板压降
+                    block.FindNode([column_name,'\Input\PRES1']).value = allcol(col2).PTOP;
+                    block.FindNode([column_name,'\Input\DP_STAGE']).value = 0.006; % pressure drop each stage
                     % determining if a condenser is needed
                     if allcol(col2).cond_type == 1
                         block.FindNode([column_name,'\Ports\VD(OUT)']).Elements.Add(dupl_D);
