@@ -1,4 +1,4 @@
-function SensitivityAna(allcol,optim_col,output_file)
+function [x,TAC]=SensitivityAna(allcol,optim_col,output_file)
 % Sensitivity Analysis
 global AF
 [cost_CW,cost_CHW,cost_BW,cost_S,cost_LPS,cost_MPS,cost_HPS,cost_SHPS] = utilities();
@@ -20,6 +20,7 @@ while i<=length(optim_col) && optim_col(i)~=0
         cost_cooling = cost_cooling + cost_BW * cond_duty * 3600 * 8000 / 1e6;
     elseif T_cond<=-5
         cost_cooling = cost_cooling + cost_BW * cond_duty * 3600 * 8000 / 1e6;
+        fprintf('Lack of refrigerant prices\n')
     end
     % Heating Cost
     T_reb=allcol(t).TBOT;
@@ -40,7 +41,8 @@ while i<=length(optim_col) && optim_col(i)~=0
     capex = capex + readmatrix(output_file,'Range',['I',num2str(t+1),':I',num2str(t+1)]);
     i=i+1;
 end
-TAC = abs(cost_cooling) + cost_heating + capex*AF;
+TAC = abs(cost_cooling) + cost_heating + AF*capex;
+
 x=cost_S:0.1*cost_S:2*cost_S;
 plot(x,TAC)
 hold on
