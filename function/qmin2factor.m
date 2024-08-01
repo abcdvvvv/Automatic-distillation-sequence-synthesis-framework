@@ -1,16 +1,17 @@
 function qmin2factor(allcol2,optim_col)
 % Improved quadratic interpolation algorithm
 global aspen columnio cost1 t allcol
-disp('【Single column optimization】')
+disp('[Single column optimization]')
 allcol = allcol2;
 block = aspen.Tree.FindNode('\Data\Blocks');
 
 for i = 1:length(optim_col)
     t = optim_col(i); % t is the column to be optimized
+    % search interval [a0=?,b0=?]
     c = ceil(allcol(t).minstage);
     a = c+1; b = round(1.55*c)+15;
     cost1 = zeros(2,b+30);
-    fprintf('RR*2\n'); % optional
+    fprintf('RR*2\n') % optional
     block.FindNode(['T',num2str(t),'\Input\BASIS_RR']).value = block.FindNode(['T',num2str(t),'\Subobjects\Vary\1\Input\UB\1']).value;
     block.FindNode(['T',num2str(t),'\Subobjects\Vary\1\Input\UB\1']).value = block.FindNode(['T',num2str(t),'\Subobjects\Vary\1\Input\UB\1']).value*2;
     [s,bfs] = qmin(a,b,0.1,1e-5);
@@ -29,7 +30,7 @@ end
 
 end
 
-%% total stages
+%% Change total stages
 function [s,bfs] = qmin(a,b,delta,epsilon)
 s0 = a; maxj = 20; maxk = 30; big = 1e6; err = 100; k = 1;
 S(k) = s0; cond = 0; h = (b-a)/2; ds = 1;
@@ -50,6 +51,7 @@ while k < maxk && err > epsilon && cond ~= 5
     end
     phi1 = feeds(s1,f(s1));
     cond = 0;
+    % The in-and-out method determines h such that phi1<phi0 and phi1<phi2
     j = 0;
     while j < maxj && abs(h) > delta && cond == 0
         if phi0 < phi1
@@ -70,6 +72,7 @@ while k < maxk && err > epsilon && cond ~= 5
         sb = s1;
         phib = feeds(s1,f(s1));
     else
+        % quadratic interpolation to solve phis
         d = 2*(2*phi1-phi0-phi2);
         if d < 0
             hb = h*(4*phi1-3*phi0-phi2)/d;
@@ -83,6 +86,7 @@ while k < maxk && err > epsilon && cond ~= 5
         h0 = abs(hb);
         h1 = abs(hb-h);
         h2 = abs(hb-2*h);
+        % determine the value of h for the next iteration
         if h0 < h,h = h0; end
         if h1 < h,h = h1; end
         if h2 < h,h = h2; end
@@ -101,7 +105,7 @@ end
 s = s0; [~,bfs] = feeds(s,f(s));
 end
 
-%% find best feed location
+%% Find best feed location
 function [minimum,fs] = feeds(st,f)
 global cost1
 st = round(st);
@@ -135,14 +139,14 @@ else
 end
 end
 
-%% golden section
+%% Enter the total number of plates and calculate the optimal feed position using the golden section method
 function [minimum,fs] = golds(st)
 global aspen cost1 t
 st = round(st);
 if cost1(1,st) ~= 0
-    minimum = cost1(1,st);
+    minimum = cost1(1,st); % The first row st is the minimum cost and the second row st is the optimal feed plate
     fs = cost1(2,st);
-    return;
+    return
 else
     block = aspen.Tree.FindNode('\Data\Blocks');
     aspen.Reinit;
@@ -150,6 +154,7 @@ else
     cost2 = zeros(1,st-2);
     block.FindNode(['T',num2str(t),'\Input\NSTAGE']).value = st;
     block.FindNode(['T',num2str(t),'\Subobjects\Column Internals\INT-1\Input\CA_STAGE2\INT-1\CS-1']).value = st-1;
+    % If the total number of plates is less than 10, use the enumeration method
     if st < 10
         for i = 3:st-2
             cost2(i) = phi([],i);
@@ -157,7 +162,7 @@ else
         cost2(cost2 == 0) = inf;
         [minimum,fs] = min(cost2);
     else
-        % search in [a0=3,b0=st-2]
+        % search interval [a0=3,b0=st-2]
         a = 3; b = st-2;
         g = (sqrt(5)-1)/2; h = b-a;
         %cost2(round(a))=phi(a); cost2(round(b))=phi(b);
@@ -192,7 +197,7 @@ else
 end
 end
 
-%% cost calculation
+%% Cost calculation
 function cost = phi(st,fs)
 global aspen allcol columnio AF t
 block = aspen.Tree.FindNode('\Data\Blocks');
@@ -206,6 +211,7 @@ fs = round(fs);
 fprintf('  feed=%d ',fs);
 % num=find([columnio{:,1}]==t);
 block.FindNode(['T',num2str(t),'\Input\FEED_STAGE\',columnio{[columnio{:,1}] == t,2}]).value = fs;
+% aspen.Reinit;
 a = run();
 pause(1)
 if a
