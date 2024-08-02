@@ -2,29 +2,27 @@
 =========================================================================
 Automatic distillation sequence synthesis framework
 - based on the preorder traversal algorithm 
-Version 1.1 Updated 2024/6/18
+Version 1.1.1 Updated 2024/8/2
 Note:
 1.Regression cannot be used together with heat integration
 This software is open source under the GNU General Public License v3.0.
 Copyright (C) 2024  abcdvvvv
 =========================================================================
 %}
-clc
-clear all
 addpath('function\')
 
 %% User options
 global AF gen_rule
-GUIindicator = 0;
 basefile = 'case3.bkp';
 path = [pwd,'\Simulation file\baseFile\'];
 feedstream = 'R1-1'; % The stream name entering the separation section
 regression = 0; % 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
-heat_integration = 0; % Heat integration
+heat_integration = 0;
+colpressure = 0; % whether to optimize column pressure
+sensitivity_ana = 0;
 work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
 AF = 1/3; % Annualization factor
-[material,gen_rule,exheatflow,max_solution] = name2struct(basefile,GUIindicator);
-colpressure = 0; % whether to optimize column pressure
+[material,gen_rule,exheatflow,max_solution] = name2struct(basefile);
 
 %% Create folder and copy file
 global mydir aspen
@@ -151,12 +149,12 @@ for i = 1:max_solution
         Cap(i,1) = sum(CapAll(optim_col{i}));
     end
     % Sensitivity Analysis with built-in plot
-    % if max_solution > 1 && ~regression
-    %     SensitivityAna(allcol,optim_col(i,:),output_file);
-    %     if i==max_solution
-    %         legend('1st','2nd','3rd')
-    %     end
-    % end
+    if sensitivity_ana && max_solution > 1 && ~regression
+        sensitivityAna(allcol,optim_col(i,:),output_file);
+        if i==max_solution
+            legend('1st','2nd','3rd')
+        end
+    end
 end
 nonHItime=toc/max_solution;
 fprintf('Average time for non-heat integration calculations=%.4f s\n',nonHItime)

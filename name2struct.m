@@ -1,4 +1,4 @@
-function [material,gen_rule,exheatflow,max_solution] = name2struct(basefile,GUIindicator)
+function [material,gen_rule,exheatflow,max_solution] = name2struct(basefile)
 %{
 Input:
     basefile: Name of the Aspen Plus simulation .bkp file.
