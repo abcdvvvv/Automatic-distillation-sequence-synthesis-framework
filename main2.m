@@ -1,12 +1,15 @@
-%==========================================================================
-% Automatic distillation sequence synthesis framework                     %
-% - based on the preorder traversal algorithm                             %
-% 20230821 version                                                        %
-% Note:                                                                   %
-% 1.Regression cannot be used together with heat integration              %
-% This software is open source under the GNU General Public License v3.0. %
-% Copyright (C) 2023  abcdvvvv                                            %
-%==========================================================================
+%{
+==========================================================================
+Automatic distillation sequence synthesis framework                     
+- based on the preorder traversal algorithm                             
+Version 1.1.1 Updated 2024/8/2                                                      
+Note:                                                                   
+1.Regression cannot be used together with heat integration              
+This software is open source under the GNU General Public License v3.0. 
+Copyright (C) 2024  abcdvvvv                                            
+==========================================================================
+%}
+
 %% Create a new file to deploy the optimal separation sequence
 global AF mydir aspen columnio column_num
 if ~exist("optim_col","var")
@@ -18,9 +21,10 @@ for d = 1:1 % d=deploy
     copyfile([pwd,'\Simulation file\baseFile\',basefile],[mydir,filename3],'f');
     fprintf('Deploy optimized PFD %d\n',d)
     evoke(mydir,filename3);
-    columnio = {};
-    % redeploy
+    % add_utility();
+    columnio = {}; % col1 tower number, col2 inlet stream, col3 top stream, col4 bottom stream
     col_deploy(material,optim_col(d,:),allcol,feedstream);
+    
     % Add design specifications and column internals
     addDSin(column_numop,allcol,optim_col(d,:));
     opex = fOPEX(allcol,optim_col(d,:));
@@ -34,15 +38,20 @@ for d = 1:1 % d=deploy
     total = sum(opex)+AF*sum(capex);
     fprintf('sum=%d\n',total);
     writematrix(total,output_file,'Range',[char(73+2*d),num2str(column_num+3)]);
+
     aspen.Save;
     disp('deployment finished.')
+    % CO2 emissions
+    % aspen.Tree.FindNode("\Data\Results Summary\Utility-Sum\Output\UTILCO2E").value;%公用工程CO2e
+    % aspen.Tree.FindNode("\Data\Results Summary\Utility-Sum\Output\TOTCO2E").value;%全厂CO2e
 end
 
 %% Single column optimization
 de=input('Perform column optimization?(y/n)','s');
 if de == 'y'
+    % col_optimize(filename3,allcol,optim_col);
     qmin2factor(allcol,optim_col(d,:));
-    disp('Column optimization finisheyd.')
+    disp('Column optimization finished.')
 else
     disp('Skip column optimization.')
 end
