@@ -16,7 +16,21 @@ MATLAB Optimization Toolbox™
 
 ## User Guide (run from the GUI)
 
+The program is relatively simple to run from the GUI. To achieve this, please adhere to the following steps.
 
+1. Open Basic Settings and select the .bkp file you need. Use the "UnitSetSIPlus.bkp" file from the source code or installation package to add the "SI+" unit set to your simulation file.
+<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/GUI1.png" width="360">
+
+2. Enter the name of the stream to be analyzed. This is usually the name of the stream entering the separation section.
+
+3. Select the maximum number of solutions and the temporary file storage path (```work_dir```).
+
+4. Open the Component spec. tab and define component names based on the selected simulation file. Note that the component name and the simulation file must correspond one-to-one. Define the product set where 0 is not a product, 1 is a product, and 2 is a mixture product.
+<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/GUI2.png" width="360">
+
+5. (optional) You can specify recovery and column pressure for two key components.
+
+TODO: I will add about the usage of the extractive distillation function in the future.
 
 ## User Guide (run from the scripting interface)
 
