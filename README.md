@@ -14,7 +14,11 @@ MATLAB: 2022a or above
 
 MATLAB Optimization Toolbox™
 
-## User Guide
+## User Guide (run from the GUI)
+
+
+
+## User Guide (run from the scripting interface)
 
 The following steps will guide you through the quick setup of the framework's runtime environment.
 
@@ -38,15 +42,13 @@ feedstream = 'R1-1';    % The stream name entering the separation section
 max_solution = 1;       % How many optimal solutions to generate
 regression = 0;         % 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
 heat_integration = 0;   % Heat integration
-colpressure = 0;        % whether to optimize column pressure
+sensitivity_ana = 0;     % whether to perform sensitivity analysis
 work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
 AF = 1/3;               % Annualization factor
 ```
 *regression* = 1 was used to calculate the relationship between feed flow F and CAPEX using linear regression. No regression when it equals 0.
 
 *heat_integration* indicates whether the heat integration calculation is performed (1) or not (0). The code for heat integration is not yet complete and in some cases it is not possible to derive feasible solutions. To be fixed.
-
-*colpressure* is used to control whether the column pressure is optimized (1) or not (0). If optimizing, ensure property analysis has been added as indicated below.
 
 *work_dir* allows you to set your own working directory. The program will create files in that directory. The default directory is the "simulation file" folder in the current folder. It is also acceptable to use an array of strings to represent the directory, for example `work_dir='d:/distillation/'`. Remember to add the slash at the end.
 
@@ -91,10 +93,18 @@ If you want to use more than one set of utilities, specify the set of utilities 
         'To',{35,200}, ... % output temperature
         'Q', {2000,-1000});% duty
     max_solution = 3; % How many optimal solutions to generate
+    utility_set = 1;
+    colpressure = 0; % whether to optimize column pressure
+    addPS = 1; % Automatic addition of property analysis
+    unit = 'SI+';
 ```
 *exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
 
 *max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharp separation sequences with this formula! $[2(n_{\mathrm{c}}-1)]!/n_{\mathrm{c}}!(n_{\mathrm{c}}-1)!$
+
+*colpressure* is used to control whether the column pressure is optimized (1) or not (0). If optimizing, ensure property analysis has been added as indicated below.
+
+*addPS* determines whether a physical property analysis is automatically added. We recommend turning it on. To do this, you need to manually import the provided "UnitSetSIPlus.bkp" file in the unit set of Aspen Plus. This file contains the unit set "SI+" for the internal calculations of the program.
 
 ### main2.m
 
