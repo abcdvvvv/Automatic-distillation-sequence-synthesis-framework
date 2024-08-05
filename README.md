@@ -4,7 +4,7 @@ This is a MATLAB implementation of the distillation sequence synthesis methodolo
 
 <img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/github8-31.png" width="800">
 
-This program does not have a graphical user interface. Instead, the user will need to interact directly with the programming interface in order to manipulate certain operating parameters. Therefore, users are expected to have a foundational understanding of MATLAB programming and a background in chemical engineering.
+The user can choose to use the framework from the graphical user interface (GUI), or from the MATLAB scripting interface. The former is recommended. Users are expected to have a foundational understanding of MATLAB programming and a background in chemical engineering.
 
 ## Requirements
 
