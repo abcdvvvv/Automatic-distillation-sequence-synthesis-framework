@@ -220,7 +220,7 @@ else
         end
         % recursion
         sep_ss(k, step, material1, 1);
-        sep_ss(number, step, material2, 2);
+        sep_ss(number-k, step, material2, 2);
     end
 end
 end
