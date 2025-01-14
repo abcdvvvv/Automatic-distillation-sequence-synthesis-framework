@@ -6,6 +6,20 @@ This is a MATLAB implementation of the distillation sequence synthesis methodolo
 
 The user can choose to use the framework from the graphical user interface (GUI), or from the MATLAB scripting interface.
 
+## Long-Term Maintenance Statement
+
+This package is in a long-term maintenance mode. Going forward, there will be no new features or functionality added. Our focus will be solely on maintaining the existing codebase, addressing critical bugs, and ensuring the continued security and stability of the package.
+
+### Our Commitments:
+- **Stability and Reliability:** We will apply bug fixes and security updates as needed to ensure a stable experience.
+- **Documentation Updates:** We will keep the README.md up-to-date, reflecting the current state of the codebase.
+- **Community Support:** We will address critical issues reported by users, although response times may vary.
+- **No New Features:** There will be no new features, enhancements, or breaking changes. This package is maintained solely for its existing functionality.
+
+Thank you for your understanding and continued use of this package.
+
+*— karei*
+
 ## Requirements
 
 Aspen Plus: V11 or above
