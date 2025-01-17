@@ -2,9 +2,7 @@
 
 This is a MATLAB implementation of the distillation sequence synthesis methodology presented in the paper "*An automatic distillation sequence synthesis framework based on a preorder traversal algorithm.*" Refer to the aforementioned paper for theoretical aspects. This section will outline the guidelines for utilizing the framework.
 
-<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/github8-31.png" width="800">
-
-The user can choose to use the framework from the graphical user interface (GUI), or from the MATLAB scripting interface.
+<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/github8-31.png" width="760">
 
 > [!NOTE]
 > **Long-Term Maintenance Notice**
