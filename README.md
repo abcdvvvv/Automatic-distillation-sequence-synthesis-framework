@@ -149,5 +149,4 @@ If you have any problems using the framework, please leave a comment on the GitH
 
 This software is open source under the GNU General Public License v3.0.
 
-If this tool helps you, please consider citing our paper: Wang A, Guzman-Urbina A, Ohno H, Fukushima Y. An automatic distillation sequence synthesis framework based on a preorder traversal algorithm. Computers & Chemical Engineering. 2024;181:108549. doi:10.1016/j.compchemeng.2023.108549
-Thank you!
+If this tool helps you, please consider citing our paper. Thank you!
