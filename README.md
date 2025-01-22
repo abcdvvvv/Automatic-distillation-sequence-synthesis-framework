@@ -31,14 +31,14 @@ MATLAB Optimization Toolbox™
 The program is relatively simple to run from the GUI. To achieve this, please adhere to the following steps.
 
 1. Open Basic Settings and select the .bkp file you need. Use the "UnitSetSIPlus.bkp" file from the source code or installation package to add the "SI+" unit set to your simulation file.
-<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/GUI1.png" width="360">
+<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/GUI1.png" width="400">
 
 2. Enter the name of the stream to be analyzed. This is usually the name of the stream entering the separation section.
 
 3. Select the maximum number of solutions and the temporary file storage path (```work_dir```).
 
 4. Open the Component spec. tab and define component names based on the selected simulation file. Note that the component name and the simulation file must correspond one-to-one. Define the product set where 0 is not a product, 1 is a product, and 2 is a mixture product.
-<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/GUI2.png" width="360">
+<img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/GUI2.png" width="400">
 
 5. (optional) You can specify recovery and column pressure for two key components.
 
@@ -152,4 +152,41 @@ If you have any problems using the framework, please leave a comment on the GitH
 
 This software is open source under the GNU General Public License v3.0.
 
-If this tool helps you, please consider citing our paper. Thank you!
+## Citation Guidelines
+
+Thank you for your interest in our work! This repository contains both the **research methodology** described in our paper and the **software implementation** that realizes it. To ensure proper acknowledgment and reproducibility, please use the appropriate citation(s) as follows:
+
+### 1. If you use our methodology or build upon the approach described in the paper
+
+Please cite our **paper**:
+
+[![Article DOI](https://img.shields.io/badge/Article%20DOI-10.1016%2Fj.compchemeng.2023.108549-red)](https://doi.org/10.1016/j.compchemeng.2023.108549)
+
+### 2. If you use the software (source code, binaries, or scripts)
+
+Please cite our **software**:
+
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14717642.svg)](https://doi.org/10.5281/zenodo.14717642)
+
+<details>
+<summary>Click to view the recommended software citation in BibTeX</summary>
+
+```bibtex
+@software{karei_2025_14717642,
+  author       = {karei},
+  title        = {abcdvvvv/Automatic-distillation-sequence-
+                   synthesis-framework: v1.2.0-alpha
+                  },
+  month        = jan,
+  year         = 2025,
+  publisher    = {Zenodo},
+  version      = {v1.2.0-alpha},
+  doi          = {10.5281/zenodo.14717642},
+  url          = {https://doi.org/10.5281/zenodo.14717642},
+}
+```
+</details>
+
+### 3. If you rely on both the paper and the software
+
+We appreciate that you might be referencing the concepts from our paper **and** making direct use of this repository. In that case, **please cite both** to acknowledge our methodological and software contributions. This helps give credit for the theoretical foundation and the practical implementation alike.
