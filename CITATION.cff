@@ -1,0 +1,32 @@
+cff-version: 1.2.0-alpha
+message: "You can cite the software and/or methodology as below."
+authors:
+- family-names: "Wang"
+  given-names: "Anqing"
+  orcid: "https://orcid.org/0009-0003-6668-9218"
+title: "Automatic-distillation-sequence-synthesis-framework"
+version: 1.2.0-alpha
+doi: 10.5281/zenodo.14717642
+date-released: 2025-01-22
+url: "https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Wang"
+    given-names: "Anqing"
+  - family-names: "Guzman-Urbina"
+    given-names: "Alexander"
+  - family-names: "Guzman-Urbina"
+    given-names: "Alexander"
+  - family-names: "Ohno"
+    given-names: "Hajime"
+  - family-names: "Fukushima"
+    given-names: "Yasuhiro"
+  doi: "10.1016/j.compchemeng.2023.108549"
+  journal: "Computers & Chemical Engineering"
+  start: 108549 # First page number
+  end: 108562 # Last page number
+  title: "An automatic distillation sequence synthesis framework based on a preorder traversal algorithm"
+  volume: 181
+  month: 2
+  year: 2024
