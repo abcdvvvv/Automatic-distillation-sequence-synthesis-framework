@@ -1,5 +1,7 @@
 # Automatic distillation sequence synthesis framework
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14717642.svg)](https://doi.org/10.5281/zenodo.14717642)
+
 This is a MATLAB implementation of the distillation sequence synthesis methodology presented in the paper "*An automatic distillation sequence synthesis framework based on a preorder traversal algorithm.*" Refer to the aforementioned paper for theoretical aspects. This section will outline the guidelines for utilizing the framework.
 
 <img src="https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework/blob/master/images/github8-31.png" width="760">
