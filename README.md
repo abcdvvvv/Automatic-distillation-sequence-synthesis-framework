@@ -44,87 +44,89 @@ The program is relatively simple to run from the GUI. To achieve this, please ad
 
 TODO: I will add about the usage of the extractive distillation function in the future.
 
-## User Guide (run from the scripting interface)
+## User Guide (Scripting Interface)
 
-The following steps will guide you through the quick setup of the framework's runtime environment.
+Use the following steps to quickly set up and run the framework in your MATLAB environment:
 
-1. Begin by downloading and unzipping the complete code package.
-2. Create a new Aspen Plus simulation file. Define components according to preferences or use provided case files. Add a feed stream in the flowchart and input its name into the variable 'feedstream' in 'main.m' for integration.
-3. In Aspen Plus, establish a 'PS-1' property set item to analyze mixture vaporization heat (DHVLMX) in kJ/kmol.
-4. Put the mentioned file in '/simulation file/baseFile' directory. Input its name into the variable 'basefile' in 'main.m'.
-5. Modify 'name2struct.m' by adding a case for the new file's name. Create a 'material' structure as outlined in the 'name2struct.m' section for defining the product subset.
-6. Execute the 'main.m' script. :tada:
+1. Download the complete code package and unzip it to your preferred location.
 
-For additional configuration customization, refer to the detailed descriptions of each individual script.
+2. Copy the file `src/main_template.m` and open it in MATLAB. Ensure that MATLAB’s current folder is set to the **parent directory** of `src` (the program root).
 
-### main.m
+3. **Prepare the Aspen Plus file**  
+   1. Create an Aspen Plus `.bkp` file and place it in the `/simulation file/baseFile` directory.  
+   2. In `main_template.m`, assign the name of this file to the variable `basefile`.
 
-This script creates a distillation sequence superstructure using the preorder traversal algorithm and the DSTWU model. The program will try to execute the simulation. If the simulation proceeds without errors, this script will adjust the parameters and then use the simulation results to formulate the MILP problem. Note that all separations are sharp separations.
+4. **Define components and boiling points**  
+   1. Within the `.bkp` file, define the required components. Their names must not exceed five characters.  
+   2. Determine the boiling points of all substances and list them in the structure `material.name` in ascending order of boiling point.
 
-There are eight user-specified parameters in this function
+5. Add a feed stream in the Aspen Plus flowchart, and specify its name in the variable `feedstream` within `main_template.m`.
+
+6. In Aspen Plus, choose the SI units for consistent parameter settings.
+
+7. Configure any remaining parameters as indicated in `main_template.m`, then run the script to execute the framework.
+
+8. For additional configuration options or more detailed explanations, consult the descriptions in each individual script.
+
+### src/main_template.m
+
+This script contains the parameters, see the comments in the script.
+
 ```
 basefile = 'case3.bkp';
-feedstream = 'R1-1';    % The stream name entering the separation section
-max_solution = 1;       % How many optimal solutions to generate
-regression = 0;         % 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
-heat_integration = 0;   % Heat integration
-sensitivity_ana = 0;     % whether to perform sensitivity analysis
-work_dir = fullfile(pwd,'Simulation file',filesep); % Setting up the working directory
-AF = 1/3;               % Annualization factor
+
+feedstream = 'R1-1'; % The stream name entering the separation section
+
+% material: A structure that contains the name of components and specified products.
+material = struct( ...
+    'name',{'NC3','IC4','NC4','IC5','NC5','CC5','IC61','IC62','IC63','NC6','CC61', ...
+    'IC7','C6H6','CC62','NC7'}, ...
+    'product',{0,0,0,1,1,1,1,0,0,0,0,0,0,0,0});
+
+% gen_rule: A structure that specifies the recovery and pressures between component pairs.
+gen_rule{1} = struct( ...
+    'name1',{"default","IC4"}, ...
+    'name2',{"default","IC5"}, ...
+    'P',{1.5*1e5,5.3*1e5}, ... % unit: Pa
+    'recovl',{0.999,[]}, ...
+    'recovh',{0.001,[]});
+
+% exheatflow: Heat exchangers other than distillation columns in case of heat integration.
+exheatflow = [];
+
+% How many optimal solutions to generate
+max_solution = 5;
+
+% Corresponds to the price defined in the `src/get_utility_price.m`
+utility_set = 1;
+
+% Whether to adjust the column pressure. 1 is recommend.
+colpressure = 1;
+
+% Automatic addition of physical property analysis
+addPS = 1;
+unit = 'SI';
+
+% *regression* = 1 was used to calculate the relationship between feed flow F and CAPEX using linear regression. No regression when it equals 0.
+% 1:regress CAPEX on F; 0:Calculate only CAPEX(y), independent of F
+regression = 0;
+
+% *heat_integration* indicates whether the heat integration calculation is performed (1) or not (0).
+heat_integration = 0;
+
+% pops up a graph after running, which shows the sensitivity analysis of the heating utility to the optimal solution.
+sensitivity_ana = 0;
+
+% *work_dir* allows you to set your own working directory. The program will create files in that directory.
+% The default directory is the "simulation file" folder in the current folder.
+work_dir = fullfile('D:','distillation',filesep); 
+
+AF = 1/3; % Annualization factor of the capital cost, which spreads the fixed capital investment of a chemical plant over each year, taking into account the time value of money.
+
+% seq = get_force_selection(max_solution); % Certain sequences can be forcibly selected
+
+run src\main_program.m  
 ```
-*regression* = 1 was used to calculate the relationship between feed flow F and CAPEX using linear regression. No regression when it equals 0.
-
-*heat_integration* indicates whether the heat integration calculation is performed (1) or not (0). The code for heat integration is not yet complete and in some cases it is not possible to derive feasible solutions. To be fixed.
-
-*work_dir* allows you to set your own working directory. The program will create files in that directory. The default directory is the "simulation file" folder in the current folder. It is also acceptable to use an array of strings to represent the directory, for example `work_dir='d:/distillation/'`. Remember to add the slash at the end.
-
-*AF* is an annualized factor of the capital cost, which spreads the fixed capital investment of a chemical plant over each year, taking into account the time value of money.
-
-If you want to turn on automatic column pressure adjustment, you must set up an additional physical property analysis in Aspen, they are
-
-- Critical temperature of the mixture (TCMX) in °C. Set this item in PS-2.
-- Bubble point pressure and dew point pressure (PBUB and PDEW) in bar. Set up these two items in PS-3. On the Qualifiers tab, uncheck System Temperature. On the right hand side enter the minimum temperature at which cooling water will be used, e.g. 40°C.
-
-This script pops up a graph after running, which shows the sensitivity analysis of the heating utility to the optimal solution.
-
-Project Address: [Links to this page](https://github.com/abcdvvvv/Automatic-distillation-sequence-synthesis-framework)
-
-### name2struct.m
-
-Use this file to define the components or groups to be separated. Please refer to sample case3.bkp for the format. Non-products are defined as 0, pure substance products are defined as 1, and mixture products are defined as 2.
-
-Here is a simple example. It defines four components: n-propane, n-butane, isopentane, and n-pentane. N-propane is defined as a non-product, n-butane is defined as a product, and isopentane and n-pentane are defined as a "group".
-```
-case 'case1.bkp'
-    material = struct( ...
-        'name',{'NC3','NC4','IC5','NC5'}, ...
-        'product',{0 1 2 2});
-```
-You can specify the default pressure and the default recovery rate with the structure `gen_rule{1}`. You can also specify the recovery rate for a substance.
-
-The following example shows how to set the default pressure to 1 bar with a recovery rate of 0.999/0.001, but specify a pressure of 2 bar and a recovery rate of 0.98/0.02 for NC4 and IC5.
-```
-    gen_rule{1} = struct( ...
-        'name1',    {"default" "NC4"}, ...
-        'name2',    {"default" "IC5"}, ...
-        'P',        {1          2}, ... 
-        'recovl',   {0.999      0.98}, ...
-        'recovh',   {0.001      0.02});
-```
-If you want to use more than one set of utilities, specify the set of utilities in this file, e.g. `utility_set=2;` then define them in utilities.m. 
-
-```
-    exheatflow = struct( ... % Heat integration for adding external heat flow
-        'Ti',{30,300}, ... % input temperature
-        'To',{35,200}, ... % output temperature
-        'Q', {2000,-1000});% duty
-    max_solution = 3; % How many optimal solutions to generate
-    utility_set = 1;
-    colpressure = 0; % whether to optimize column pressure
-    addPS = 1; % Automatic addition of property analysis
-    unit = 'SI+';
-```
-*exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
 
 *max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharp separation sequences with this formula! $[2(n_{\mathrm{c}}-1)]!/n_{\mathrm{c}}!(n_{\mathrm{c}}-1)!$
 
@@ -132,7 +134,44 @@ If you want to use more than one set of utilities, specify the set of utilities 
 
 *addPS* determines whether a physical property analysis is automatically added. We recommend turning it on. To do this, you need to manually import the provided "UnitSetSIPlus.bkp" file in the unit set of Aspen Plus. This file contains the unit set "SI+" for the internal calculations of the program.
 
-### main2.m
+#### The structure `material` and `gen_rule`           
+
+Those structures are used to define the components or groups to be separated. Please refer to sample 'case3.bkp' for the format. Non-products are defined as 0, pure substance products are defined as 1, and mixture products are defined as 2.
+
+Here is an example. It defines four components: n-propane, n-butane, isopentane, and n-pentane. N-propane is defined as a non-product, n-butane is defined as a product, and isopentane and n-pentane are defined as a "group".
+```
+material = struct( ...
+    'name',{'NC3','NC4','IC5','NC5'}, ...
+    'product',{0 1 2 2});  
+```
+You can specify the default pressure and the default recovery rate with the structure `gen_rule{1}`. You can also specify the recovery rate for a substance.
+
+The following example shows how to set the default pressure to 1 bar with a recovery rate of 0.999/0.001, but specify a pressure of 2 bar and a recovery rate of 0.98/0.02 for NC4 and IC5.
+```
+gen_rule{1} = struct( ...
+    'name1',    {"default" "NC4"}, ...
+    'name2',    {"default" "IC5"}, ...
+    'P',        {1          2}, ...     
+    'recovl',   {0.999      0.98}, ...
+    'recovh',   {0.001      0.02});  
+```
+
+If you want to use more than one set of utilities, specify the set of utilities in this file, e.g. `utility_set=2;` then define them in 'script/set_utility_price.m'. 
+
+*exheatflow* is a variable that can append an external heat exchanger, or delete the contents of this structure if there is no external heat exchanger. For example `'Ti',{},...`
+```
+exheatflow = struct( ... % Heat integration for adding external heat flow
+    'Ti',{30,300}, ... % input temperature
+    'To',{35,200}, ... % output temperature
+    'Q', {2000,-1000});% duty
+```
+
+### script/main_program.m
+
+This script creates a distillation sequence superstructure using the preorder traversal algorithm and the DSTWU model. The program will try to execute the simulation. 
+If the simulation proceeds without errors, this script will adjust the parameters and then use the simulation results to formulate the MILP problem. Note that all separations are sharp separations.
+
+### src/main2.m
 
 This script redeploys the optimal distillation sequence using the Radfrac model and optimizes it using an improved quadratic interpolation algorithm.
 
