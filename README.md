@@ -68,7 +68,7 @@ Use the following steps to quickly set up and run the framework in your MATLAB e
 
 8. For additional configuration options or more detailed explanations, consult the descriptions in each individual script.
 
-### src/main_template.m
+## src/main_template.m
 
 This script contains the parameters, see the comments in the script.
 
@@ -100,7 +100,7 @@ max_solution = 5;
 % Corresponds to the price defined in the `src/get_utility_price.m`
 utility_set = 1;
 
-% Whether to adjust the column pressure. 1 is recommend.
+% colpressure is used to control whether the column pressure is optimized (1) or not (0). If optimizing, ensure property analysis has been added as indicated below.
 colpressure = 1;
 
 % Automatic addition of physical property analysis
@@ -128,13 +128,11 @@ AF = 1/3; % Annualization factor of the capital cost, which spreads the fixed ca
 run src\main_program.m  
 ```
 
-*max_solution* controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharp separation sequences with this formula! $[2(n_{\mathrm{c}}-1)]!/n_{\mathrm{c}}!(n_{\mathrm{c}}-1)!$
+`max_solution` controls how many optimal solutions the program solves for. The limitation of not being able to solve for more than four sequences has been fixed since version 1.1. You can now solve up to the maximum number of feasible sequences. Try to calculate the maximum number of sharp separation sequences with this formula! $[2(n_{\mathrm{c}}-1)]!/n_{\mathrm{c}}!(n_{\mathrm{c}}-1)!$
 
-*colpressure* is used to control whether the column pressure is optimized (1) or not (0). If optimizing, ensure property analysis has been added as indicated below.
+`addPS` determines whether a physical property analysis is automatically added. We recommend turning it on. To do this, you need to manually import the provided "UnitSetSIPlus.bkp" file in the unit set of Aspen Plus. This file contains the unit set "SI+" for the internal calculations of the program.
 
-*addPS* determines whether a physical property analysis is automatically added. We recommend turning it on. To do this, you need to manually import the provided "UnitSetSIPlus.bkp" file in the unit set of Aspen Plus. This file contains the unit set "SI+" for the internal calculations of the program.
-
-#### The structure `material` and `gen_rule`           
+### The structure `material` and `gen_rule`           
 
 Those structures are used to define the components or groups to be separated. Please refer to sample 'case3.bkp' for the format. Non-products are defined as 0, pure substance products are defined as 1, and mixture products are defined as 2.
 
@@ -166,12 +164,12 @@ exheatflow = struct( ... % Heat integration for adding external heat flow
     'Q', {2000,-1000});% duty
 ```
 
-### script/main_program.m
+## script/main_program.m
 
 This script creates a distillation sequence superstructure using the preorder traversal algorithm and the DSTWU model. The program will try to execute the simulation. 
 If the simulation proceeds without errors, this script will adjust the parameters and then use the simulation results to formulate the MILP problem. Note that all separations are sharp separations.
 
-### src/main2.m
+## src/main2.m
 
 This script redeploys the optimal distillation sequence using the Radfrac model and optimizes it using an improved quadratic interpolation algorithm.
 
@@ -179,7 +177,7 @@ main2.m and main.m are separate, but main2.m needs to use the workspace variable
 
 The user can choose which distillation sequences to redeploy by changing the loop range in `for d=1:1`. (For example, `d=2:2` deploys only the second-best solution, and `d=1:3` deploys the top three)
 
-### Output
+## Output
 
 All the results of the calculations are stored in a spreadsheet called **output.xlsx**. In version 1.1, the format of the spreadsheet was optimized to make it more suitable for use in publications.
 
