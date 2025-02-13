@@ -29,14 +29,15 @@ for i = 1:column_num
     %         septask(i,j)=char(64+material(str2double(columnio{i,5}(j))).sep);
     %     end
     % end % This generated "septask" is used to manually read and add in excel
+    % kmol/s
     feed_mole_flow = [feed_mole_flow; stream.FindNode(['S',num2str(i),'\Output\MOLEFLMX\MIXED']).value]; %#ok<*AGROW>
-    T_mean = (allcol(i).TTOP + allcol(i).TBOT)/2 + 273.15; % K
-    n = allcol(i).reb_duty/DHVL(i); % kmol
+    T_mean = (allcol(i).TTOP + allcol(i).TBOT)/2+273.15; % K
+    n = allcol(i).reb_duty/DHVL(i); % J/s / J/kmol = kmol/s
     % n=n/columnio{i,6};
     Vs = n*1000*R*T_mean/((allcol(i).PTOP + allcol(i).PBOT)/2); % ideal gas EOS
-    rho_L = stream.FindNode([columnio{i,4},'\Output\RHOMX_MASS\MIXED']).value;
+    rho_L = stream.FindNode([columnio{i,4},'\Output\RHOMX_MASS\MIXED']).value*1000; % g/m^3
     MW = stream.FindNode([columnio{i,4},'\Output\MW']).value; % molecular weight
-    rho_V = MW/22.4;
+    rho_V = MW/(22.4*1e-3); % g/mol / m^3/mol = g/m^3
     u_max = C*sqrt((rho_L - rho_V)/rho_V);
     u = floor(u_max*10)/10;
     Diameter(i,1) = sqrt(4*Vs/(pi*u)); % m
@@ -57,7 +58,7 @@ for i = 1:column_num
 end
 
 cost_table = table(Column_k,Stages,RR,Qcond_k,Qreb_k,Diameter);
-cost_table.K_cond = cost_table.Qcond_k./feed_mole_flow./1e9; % K heat duty coefficients, GJ/kmol
+cost_table.K_cond = cost_table.Qcond_k./feed_mole_flow./1e9; % K heat duty coefficients, GJ/mol
 cost_table.K_reb = cost_table.Qreb_k./feed_mole_flow./1e9;
 cost_table.Cap = [allcol.Cap]';
 cost_table.Cut = [allcol.Cut]';

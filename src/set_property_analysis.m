@@ -15,7 +15,7 @@ aspen.Quit
 release(aspen)
 
 contents=fileread([mydir,filename]);
-oldtext{1}=['"PS-1" ? ; "',unit,'_MOLE" ; \ P1 1 \ \ P2'];
+oldtext{1}=['"PS-1" ? ; "',unit,'_MOLE" ;'];
 oldtext{2}=['"PS-2" ? ; "',unit,'_MOLE" ; \ P1 1 \ \ P2'];
 oldtext{3}=['"PS-3" ? ; "',unit,'_MOLE" ; \ P1 1 \ \ P1 2 \ \ P2'];
 newtext{1}=['"PS-1" ? ; "',unit,'_MOLE" ; \ P1 ID = DHVLMX UNITS = ( "J/kmol" ) \ \ P2 SYSPRES = YES'];
