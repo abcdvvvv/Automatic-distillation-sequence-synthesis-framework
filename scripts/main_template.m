@@ -63,4 +63,5 @@ AF = 1/3; % Annualization factor
 
 % seq = get_force_selection(max_solution); % Certain sequences can be forcibly selected
 
+path = fullfile(pwd,'Simulation file','baseFile',filesep);
 run src\main_program.m
